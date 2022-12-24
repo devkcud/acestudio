@@ -5,6 +5,7 @@
     let audioElement: HTMLAudioElement;
     let seekSlider: HTMLInputElement;
     let audioCurrentTimeText: HTMLSpanElement;
+    let audioDurationText: HTMLSpanElement;
 
     /* Utils */
     function pauseSong(): void {
@@ -54,12 +55,15 @@
         audioElement = document.getElementById('audio') as HTMLAudioElement;
 
         audioCurrentTimeText = document.getElementById('audio-current-time')!;
+        audioDurationText = document.getElementById('audio-duration')!;
 
         seekSlider = document.getElementById('seek-slider') as HTMLInputElement;
         seekSlider.max = Math.floor(audioElement.duration).toString();
 
         // Update the audio duration text to the actual song duration (`MMMM:SS`)
-        document.getElementById('audio-duration')!.textContent = getDuration(audioElement.duration);
+        audioDurationText.textContent = getDuration(audioElement.duration); // Set it first
+        audioElement.onloadeddata = () =>
+            (audioDurationText.textContent = getDuration(audioElement.duration)); // Correction if (NaN)
 
         audioElement.addEventListener('timeupdate', updateCurrentTime);
     });
@@ -77,6 +81,6 @@
 
 <span id="audio-current-time">0:00</span>
 <input id="seek-slider" type="range" max="100" value="0" on:input={changeCurrentTime} />
-<span id="audio-duration" />
+<span id="audio-duration">0:00</span>
 
 <input id="volume-slider" type="range" max="100" value="100" step="1" on:input={changeVolume} />
