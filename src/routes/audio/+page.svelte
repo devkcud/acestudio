@@ -20,11 +20,15 @@
         return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
     }
 
-    function updateCurrentTime() {
+    export function updateCurrentTime() {
         const currentTime = Math.floor(audioElement.currentTime).toString();
 
         audioCurrentTimeText.textContent = getDuration(parseInt(currentTime));
         seekSlider.value = currentTime;
+    }
+
+    export function updateDuration() {
+        audioDurationText.textContent = getDuration(audioElement.duration);
     }
 
     /* Controls */
@@ -60,14 +64,8 @@
         seekSlider = document.getElementById('seek-slider') as HTMLInputElement;
         seekSlider.max = Math.floor(audioElement.duration).toString();
 
-        // Update the audio duration text to the actual song duration (`MMMM:SS`)
-        audioDurationText.textContent = getDuration(audioElement.duration); // Set it first
-        audioElement.onloadeddata = () =>
-            (audioDurationText.textContent = getDuration(audioElement.duration)); // Correction if (NaN)
-
-        audioElement.addEventListener('timeupdate', updateCurrentTime);
-
-        audioElement.onended = stopSong;
+        // Initial audio duration update
+        updateDuration();
     });
 </script>
 
@@ -75,7 +73,13 @@
     <title>Hello, world!</title>
 </svelte:head>
 
-<audio id="audio" src="/src/assets/daftpunk_song.mp3" />
+<audio
+    id="audio"
+    src="/src/assets/daftpunk_song.mp3"
+    on:ended={stopSong}
+    on:timeupdate={updateCurrentTime}
+    on:loadedmetadata={updateDuration}
+/>
 
 <!-- Audio Controls -->
 <input id="play-button" type="button" on:click={playSong} value="Play" />
