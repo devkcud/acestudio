@@ -66,6 +66,8 @@
             (audioDurationText.textContent = getDuration(audioElement.duration)); // Correction if (NaN)
 
         audioElement.addEventListener('timeupdate', updateCurrentTime);
+
+        audioElement.onended = stopSong;
     });
 </script>
 
