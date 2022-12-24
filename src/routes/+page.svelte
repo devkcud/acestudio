@@ -25,13 +25,13 @@
 
     export function changeVolume() {
         const element = document.getElementById('volume-slider') as HTMLInputElement;
-        audioElement.volume = element.valueAsNumber;
+        audioElement.volume = element.valueAsNumber / 100;
     }
 
     /* After render */
     onMount(() => {
-        audioElement = document.getElementById('audio') as HTMLAudioElement;
         playButton = document.getElementById('play-button') as HTMLInputElement;
+        audioElement = document.getElementById('audio') as HTMLAudioElement;
     });
 </script>
 
@@ -46,4 +46,4 @@
 <input id="stop-button" type="button" on:click={stopSong} value="Stop" />
 
 <!-- TODO: make a slider to control playback -->
-<input id="volume-slider" type="range" min="0" max="1" step="0.01" on:input={changeVolume} />
+<input id="volume-slider" type="range" max="100" value="100" step="1" on:input={changeVolume} />
