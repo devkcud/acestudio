@@ -8,12 +8,12 @@
     let audioDurationText: HTMLSpanElement;
 
     /* Utils */
-    function pauseSong(): void {
+    export function pauseSong(): void {
         audioElement.pause();
         playButton.value = 'Play';
     }
 
-    function getDuration(totalInSeconds: number): string {
+    export function getDuration(totalInSeconds: number): string {
         const minutes = Math.floor(totalInSeconds / 60);
         const seconds = Math.floor(totalInSeconds % 60);
 
